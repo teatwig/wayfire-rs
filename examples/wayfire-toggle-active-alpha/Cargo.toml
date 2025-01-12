@@ -1,0 +1,9 @@
+[package]
+name = "wayfire-toggle-active-alpha"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+signal-hook = "0.3.17"
+tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread"] }
+wayfire-rs = "0.2.2"
