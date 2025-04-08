@@ -271,6 +271,18 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    pub async fn set_view_always_on_top(&mut self, view_id: i64, state: bool) -> io::Result<Value> {
+        let message = MsgTemplate {
+            method: "wm-actions/set-always-on-top".to_string(),
+            data: Some(serde_json::json!({
+                "view_id": view_id,
+                "state": state
+            })),
+        };
+
+        self.send_json(&message).await
+    }
+
     pub async fn set_view_fullscreen(&mut self, view_id: i64, state: bool) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "wm-actions/set-fullscreen".to_string(),
