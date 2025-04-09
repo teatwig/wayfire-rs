@@ -1,16 +1,6 @@
 # Wayfire-rs
 
-`wayfire-rs` is a Rust library for interacting with Wayfire, a Wayland compositor. This project provides functionalities to communicate with Wayfire using IPC, manage views, outputs, and configurations, and more.
-
-## Features
-
-- **Connect to Wayfire**: Establish a connection to the Wayfire socket.
-- **Send and Receive JSON Messages**: Send JSON messages to Wayfire and handle responses.
-- **List and Manage Views**: Retrieve information about and manage views.
-- **List and Manage Outputs**: Get details about outputs connected to Wayfire.
-- **Retrieve Configuration**: Access Wayfire's configuration details.
-- **Handle Input Devices**: Get information about input devices.
-- **Manage Workspaces**: Retrieve workspace details and manage workspace sets.
+wayfire-rs is a high-level Rust interface for Wayfire, offering comprehensive control over the wayfire compositor through its IPC protocol.
 
 ## Getting Started
 
@@ -31,18 +21,54 @@ wayfire-rs = "0.2.1"
 
 Basic usage in wayfire-rs/examples folder and lots of examples in wayfire-rs/src/main.rs
 
-### API Methods
+## Wayfire IPC API Reference
 
-    list_views: Retrieves a list of views.
-    list_outputs: Retrieves a list of outputs.
-    list_wsets: Retrieves a list of workspace sets.
-    list_input_devices: Retrieves a list of input devices.
-    get_configuration: Retrieves Wayfire's configuration.
-    get_option_value: Retrieves the value of a specific configuration option.
-    get_output: Retrieves information about a specific output.
-    get_view: Retrieves information about a specific view.
-    get_focused_view: Retrieves information about the currently focused view.
-    get_focused_output: Retrieves information about the currently focused output.
+### View Operations
+- **`get_view`** - Retrieves information about a specific view
+- **`get_focused_view`** - Gets the currently focused view
+- **`get_view_alpha`** - Retrieves the transparency (alpha) value of a view
+- **`set_view_alpha`** - Sets the transparency (alpha) value of a view
+- **`set_view_always_on_top`** - Toggles "always on top" state for a view
+- **`set_view_fullscreen`** - Toggles fullscreen mode for a view
+- **`set_view_sticky`** - Toggles sticky (visible on all workspaces) state
+- **`set_view_minimized`** - Minimizes or restores a view
+- **`send_view_to_back`** - Sends a view to the back of the stacking order
+- **`close_view`** - Closes a view
+- **`configure_view`** - Adjusts view geometry (position/size) and output assignment
+- **`set_focus`** - Focuses a specific view
+- **`assign_slot`** - Assigns view to a grid slot (e.g., "grid/left")
+
+### Output Management
+- **`get_output`** - Retrieves information about a specific output
+- **`get_focused_output`** - Gets the currently focused output
+- **`create_headless_output`** - Creates a virtual output with specified dimensions
+- **`destroy_headless_output`** - Removes a headless output (by ID or name)
+
+### Workspace & Layout
+- **`get_tiling_layout`** - Retrieves layout for a workspace
+- **`set_tiling_layout`** - Configures workspace layout
+- **`set_workspace`** - Moves view to specific workspace on an output
+- **`wset_info`** - Gets workspace set information
+- **`toggle_showdesktop`** - Toggles show-desktop mode (minimizes/restores all views)
+
+### Effects & Animations
+- **`expo_toggle`** - Toggles workspace overview (Expo)
+- **`scale_toggle`** - Toggles window overview (Scale)
+- **`scale_toggle_all`** - Toggles Scale for all windows
+- **`cube_activate`** - Activates 3D workspace cube
+- **`cube_rotate_left`** - Rotates cube left
+- **`cube_rotate_right`** - Rotates cube right
+
+### Input & Cursor
+- **`get_cursor_position`** - Retrieves current (x,y) cursor coordinates
+- **`configure_input_device`** - Enables/disables input devices
+
+### Event System
+- **`watch`** - Subscribes to window-rules events (with optional filter)
+
+### Configuration
+- **`get_configuration`** - Retrieves Wayfire's full configuration
+- **`get_option_value`** - Gets value of a specific config option
 
 ### Contributing
 
