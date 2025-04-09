@@ -50,6 +50,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
         Err(e) => eprintln!("Failed to get option value: {}", e),
     }
 
+    match socket.get_cursor_position().await {
+        Ok((x, y)) => println!("Cursor position: x={}, y={}", x, y),
+        Err(e) => eprintln!("Cursor position error: {}", e),
+    }
+
     match socket.get_output(1).await {
         Ok(output) => print_json("get_output", output).await?,
         Err(e) => eprintln!("Failed to get output: {:?}", e),

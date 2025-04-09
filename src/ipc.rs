@@ -139,6 +139,7 @@ impl WayfireSocket {
         Ok(output)
     }
 
+    #[allow(dead_code)]
     pub async fn get_view(&mut self, view_id: i64) -> io::Result<View> {
         let message = MsgTemplate {
             method: "window-rules/view-info".to_string(),
@@ -174,6 +175,8 @@ impl WayfireSocket {
 
         Ok(view)
     }
+
+    #[allow(dead_code)]
     pub async fn get_focused_output(&mut self) -> Result<Output, Box<dyn Error>> {
         let message = MsgTemplate {
             method: "window-rules/get-focused-output".to_string(),
@@ -189,6 +192,28 @@ impl WayfireSocket {
         let output: Output = serde_json::from_value(output_info.clone())?;
 
         Ok(output)
+    }
+
+    pub async fn get_cursor_position(&mut self) -> io::Result<(f64, f64)> {
+        let message = MsgTemplate {
+            //FIXME: Create a Wayfire PR to modify from _ to `get-cursor-position` to maintain the pattern.
+            method: "window-rules/get_cursor_position".to_string(),
+            data: None,
+        };
+
+        let response = self.send_json(&message).await?;
+
+        let pos = response.get("pos").ok_or_else(|| {
+            io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Missing 'pos' field in response",
+            )
+        })?;
+
+        Ok((
+            pos["x"].as_f64().unwrap_or(0.0),
+            pos["y"].as_f64().unwrap_or(0.0),
+        ))
     }
 
     pub async fn get_view_alpha(&mut self, view_id: i64) -> io::Result<ViewAlpha> {
@@ -211,6 +236,7 @@ impl WayfireSocket {
         Ok(view_alpha)
     }
 
+    #[allow(dead_code)]
     pub async fn set_view_alpha(&mut self, view_id: i64, alpha: f64) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "wf/alpha/set-view-alpha".to_string(),
@@ -223,6 +249,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn get_tiling_layout(&mut self, wset: i64, x: i64, y: i64) -> io::Result<Layout> {
         let message = MsgTemplate {
             method: "simple-tile/get-layout".to_string(),
@@ -249,6 +276,7 @@ impl WayfireSocket {
         Ok(layout)
     }
 
+    #[allow(dead_code)]
     pub async fn set_tiling_layout(
         &mut self,
         wset: i64,
@@ -271,6 +299,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn set_view_always_on_top(&mut self, view_id: i64, state: bool) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "wm-actions/set-always-on-top".to_string(),
@@ -283,6 +312,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn set_view_fullscreen(&mut self, view_id: i64, state: bool) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "wm-actions/set-fullscreen".to_string(),
@@ -312,6 +342,8 @@ impl WayfireSocket {
 
         self.send_json(&message).await
     }
+
+    #[allow(dead_code)]
     pub async fn scale_toggle_all(&mut self) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "expo/toggle_all".to_string(),
@@ -389,6 +421,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn configure_input_device(&mut self, id: i64, enabled: bool) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "input/configure-device".to_string(),
@@ -400,6 +433,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn close_view(&mut self, view_id: i64) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "window-rules/close-view".to_string(),
@@ -410,6 +444,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn wset_info(&mut self, id: i64) -> io::Result<serde_json::Value> {
         let message = MsgTemplate {
             method: "window-rules/wset-info".to_string(),
@@ -421,6 +456,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn watch(&mut self, events: Option<Vec<String>>) -> io::Result<serde_json::Value> {
         let mut data = serde_json::json!({});
         if let Some(events) = events {
@@ -508,6 +544,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn create_headless_output(&mut self, width: u32, height: u32) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "wayfire/create-headless-output".to_string(),
@@ -520,6 +557,7 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    #[allow(dead_code)]
     pub async fn destroy_headless_output(
         &mut self,
         output_name: Option<String>,

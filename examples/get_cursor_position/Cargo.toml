@@ -1,0 +1,8 @@
+[package]
+name = "get_cursor_position"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wayfire-rs = { path = "../.." }                  # Points to root Cargo.toml
+tokio = { version = "1.0", features = ["full"] }
