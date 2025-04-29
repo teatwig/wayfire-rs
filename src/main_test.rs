@@ -11,7 +11,6 @@ async fn print_json<T: serde::Serialize>(label: &str, data: T) -> io::Result<()>
     Ok(())
 }
 
-#[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let mut socket = ipc::WayfireSocket::connect().await?;
 

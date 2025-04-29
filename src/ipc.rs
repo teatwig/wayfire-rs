@@ -7,11 +7,28 @@ use std::collections::VecDeque;
 use std::env;
 use std::error::Error;
 use std::io;
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::UnixStream as TokioUnixStream;
+use std::io::prelude::*;
+use std::os::unix::net::UnixStream;
+use std::path::Path;
+
+struct UnixStreamWrapper {
+    stream: UnixStream,
+}
+
+impl UnixStreamWrapper {
+    async fn connect<P: AsRef<Path>>(path: P) -> io::Result<Self> {
+        UnixStream::connect(path).and_then(|stream| Ok(Self { stream }))
+    }
+    async fn write_all(&mut self, buf: &[u8]) -> io::Result<()> {
+        self.stream.write_all(buf)
+    }
+    async fn read_exact(&mut self, buf: &mut [u8]) -> io::Result<()> {
+        self.stream.read_exact(buf)
+    }
+}
 
 pub struct WayfireSocket {
-    client: TokioUnixStream,
+    client: UnixStreamWrapper,
     pending_events: VecDeque<Value>,
 }
 
@@ -19,7 +36,7 @@ impl WayfireSocket {
     pub async fn connect() -> io::Result<Self> {
         let socket_name =
             env::var("WAYFIRE_SOCKET").expect("WAYFIRE_SOCKET environment variable not set");
-        let client = TokioUnixStream::connect(&socket_name).await?;
+        let client = UnixStreamWrapper::connect(&socket_name).await?;
         Ok(WayfireSocket {
             client,
             pending_events: VecDeque::new(),
