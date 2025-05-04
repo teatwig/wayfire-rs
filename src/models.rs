@@ -74,7 +74,7 @@ pub struct View {
     #[serde(rename = "type")]
     pub type_field: String,
     #[serde(rename = "wset-index")]
-    pub wset_index: u128,
+    pub wset_index: u64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -128,7 +128,7 @@ pub struct Output {
     #[serde(rename = "workspace")]
     pub workspace: Workspace,
     #[serde(rename = "wset-index")]
-    pub wset_index: u128,
+    pub wset_index: u64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
