@@ -96,7 +96,7 @@ pub struct Layout {
     pub vertical_split: Vec<Layout>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Eq, PartialEq, Copy, Clone, Serialize, Deserialize, Debug)]
 pub struct Geometry {
     pub height: i64,
     pub width: i64,
