@@ -3,6 +3,7 @@ use crate::models::{
     WayfireConfiguration, WorkspaceSet,
 };
 use serde_json::Value;
+use std::collections::VecDeque;
 use std::env;
 use std::error::Error;
 use std::io;
@@ -11,6 +12,7 @@ use tokio::net::UnixStream as TokioUnixStream;
 
 pub struct WayfireSocket {
     client: TokioUnixStream,
+    pending_events: VecDeque<Value>,
 }
 
 impl WayfireSocket {
@@ -18,7 +20,10 @@ impl WayfireSocket {
         let socket_name =
             env::var("WAYFIRE_SOCKET").expect("WAYFIRE_SOCKET environment variable not set");
         let client = TokioUnixStream::connect(&socket_name).await?;
-        Ok(WayfireSocket { client })
+        Ok(WayfireSocket {
+            client,
+            pending_events: VecDeque::new(),
+        })
     }
 
     pub async fn send_json(&mut self, msg: &MsgTemplate) -> io::Result<Value> {
@@ -28,7 +33,15 @@ impl WayfireSocket {
         self.client.write_all(&header).await?;
         self.client.write_all(&data).await?;
 
-        self.read_message().await
+        loop {
+            let msg = self.read_message().await?;
+            if msg.get("event").is_some() {
+                self.pending_events.push_back(msg);
+                continue;
+            } else {
+                return Ok(msg);
+            }
+        }
     }
 
     pub async fn read_exact(&mut self, n: usize) -> io::Result<Vec<u8>> {
@@ -49,6 +62,13 @@ impl WayfireSocket {
         }
 
         Ok(response)
+    }
+
+    pub async fn read_next_event(&mut self) -> io::Result<Value> {
+        match self.pending_events.pop_front() {
+            Some(event) => Ok(event),
+            None => self.read_message().await,
+        }
     }
 
     pub async fn list_views(&mut self) -> io::Result<Vec<View>> {
@@ -456,7 +476,6 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
-    #[allow(dead_code)]
     pub async fn watch(&mut self, events: Option<Vec<String>>) -> io::Result<serde_json::Value> {
         let mut data = serde_json::json!({});
         if let Some(events) = events {
