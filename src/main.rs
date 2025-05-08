@@ -123,6 +123,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
+    // Watch for geometry changed events
+    match socket
+        .watch(Some(vec!["view-geometry-changed".to_string()]))
+        .await
+    {
+        Ok(response) => print_json("watch", response).await?,
+        Err(e) => eprintln!("Failed to watch for events: {}", e),
+    }
+
     // Configure view
     match socket
         .configure_view(focused_view_id, 100, 100, 800, 600, Some(1))
@@ -130,6 +139,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     {
         Ok(response) => print_json("configure_view", response).await?,
         Err(e) => eprintln!("Failed to configure view: {}", e),
+    }
+
+    // Read the next event (should be the above configure view)
+    match socket.read_next_event().await {
+        Ok(event) => print_json("read_next_event", event).await?,
+        Err(e) => eprintln!("Failed to read next event: {}", e),
     }
 
     // Assign slot
