@@ -62,6 +62,9 @@ Basic usage in wayfire-rs/examples folder and lots of examples in wayfire-rs/src
 ### Input & Cursor
 - **`get_cursor_position`** - Retrieves current (x,y) cursor coordinates
 - **`configure_input_device`** - Enables/disables input devices
+- **`get_keyboard_layout`** - Gets the current keyboard layout information
+- **`set_keyboard_layout`** - Sets the active keyboard layout (e.g., by index or name)
+
 
 ### Event System
 - **`watch`** - Subscribes to window-rules events (with optional filter)

@@ -617,7 +617,7 @@ impl WayfireSocket {
         let message = MsgTemplate {
             method: "wayfire/set-keyboard-state".to_string(),
             data: Some(serde_json::json!({
-                "layout-index": index // ← Use "layout-index" instead of "index"
+                "layout-index": index
             })),
         };
         self.send_json(&message).await
