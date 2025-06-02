@@ -23,6 +23,12 @@ pub struct OptionValueResponse {
     pub value: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct KeyboardState {
+    pub layout_index: u32,
+    pub layout_name: String,
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct WayfireConfiguration {
     #[serde(rename = "api-version")]
@@ -74,7 +80,7 @@ pub struct View {
     #[serde(rename = "type")]
     pub type_field: String,
     #[serde(rename = "wset-index")]
-    pub wset_index: u128,
+    pub wset_index: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -128,7 +134,7 @@ pub struct Output {
     #[serde(rename = "workspace")]
     pub workspace: Workspace,
     #[serde(rename = "wset-index")]
-    pub wset_index: u128,
+    pub wset_index: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

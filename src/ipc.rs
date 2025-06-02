@@ -602,4 +602,25 @@ impl WayfireSocket {
 
         self.send_json(&message).await
     }
+
+    #[allow(dead_code)]
+    pub async fn get_keyboard_layout(&mut self) -> io::Result<serde_json::Value> {
+        let message = MsgTemplate {
+            method: "wayfire/get-keyboard-state".to_string(),
+            data: None,
+        };
+        self.send_json(&message).await
+    }
+
+    #[allow(dead_code)]
+    pub async fn set_keyboard_layout(&mut self, index: u32) -> io::Result<serde_json::Value> {
+        let message = MsgTemplate {
+            method: "wayfire/set-keyboard-state".to_string(),
+            data: Some(serde_json::json!({
+                "layout-index": index // ← Use "layout-index" instead of "index"
+            })),
+        };
+        self.send_json(&message).await
+    }
+
 }
