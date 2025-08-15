@@ -1,9 +1,8 @@
 use wayfire_rs::ipc::{WayfireSocket, View};
-use rand::Rng; 
+use rand::Rng;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Connect to the Wayfire IPC socket
     let mut socket = WayfireSocket::connect().await?;
 
     // Get the focused view
@@ -12,9 +11,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Focused view ID: {}", view_id);
 
     // Generate random workspace coordinates
-    let mut rng = rand::thread_rng();
-    let target_x: i32 = rng.gen_range(0..3); 
-    let target_y: i32 = rng.gen_range(0..3);
+    let mut rng = rand::rng();
+    let target_x: i32 = rng.random_range(0..3);
+    let target_y: i32 = rng.random_range(0..3);
 
     println!(
         "Moving view {} to workspace ({}, {})",
