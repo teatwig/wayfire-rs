@@ -48,6 +48,7 @@ Basic usage in wayfire-rs/examples folder and lots of examples in wayfire-rs/src
 - **`get_tiling_layout`** - Retrieves layout for a workspace
 - **`set_tiling_layout`** - Configures workspace layout
 - **`set_workspace`** - Moves view to specific workspace on an output
+- **`send_view_to_workspace`** - Moves a specific view to given workspace coordinates
 - **`wset_info`** - Gets workspace set information
 - **`toggle_showdesktop`** - Toggles show-desktop mode (minimizes/restores all views)
 
