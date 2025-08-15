@@ -1,5 +1,5 @@
 use wayfire_rs::ipc::{WayfireSocket, View};
-use rand::Rng; // Add rand = "0.8" to Cargo.toml
+use rand::Rng; 
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -13,7 +13,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Generate random workspace coordinates
     let mut rng = rand::thread_rng();
-    let target_x: i32 = rng.gen_range(0..3); // adjust max as needed
+    let target_x: i32 = rng.gen_range(0..3); 
     let target_y: i32 = rng.gen_range(0..3);
 
     println!(
