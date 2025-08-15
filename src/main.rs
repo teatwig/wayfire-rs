@@ -1,6 +1,7 @@
 use serde_json::to_string_pretty;
 use std::error::Error;
 use std::io;
+use rand::Rng;
 
 mod ipc;
 mod models;
@@ -25,6 +26,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let outputs = socket.list_outputs().await?;
     let wsets = socket.list_wsets().await?;
     let input_devices = socket.list_input_devices().await?;
+    let mut rng = rand::rng();
+    let target_x: i32 = rng.random_range(0..3);
+    let target_y: i32 = rng.random_range(0..3);
+    let state = true;
 
     for view in &views {
         print_json("list_views", view).await?;
@@ -106,22 +111,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let focused_view = socket.get_focused_view().await?;
-    let view_id = focused_view.id;
+    let focused_view_id = focused_view.id;
 
     match socket.toggle_showdesktop().await {
         Ok(_) => println!("Toggled show desktop successfully."),
         Err(e) => eprintln!("Failed to toggle show desktop: {}", e),
     }
-
-    let state = true;
-
-    let focused_view_id = match socket.get_focused_view().await {
-        Ok(view) => view.id,
-        Err(e) => {
-            eprintln!("Failed to get focused view: {}", e);
-            return Err(e);
-        }
-    };
 
     // Watch for geometry changed events
     match socket
@@ -167,6 +162,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
     match socket.send_view_to_back(view_id, state).await {
         Ok(_) => println!("Sent view to back successfully."),
         Err(e) => eprintln!("Failed to send view to back: {}", e),
+    }
+
+    match socket.send_view_to_workspace(view_id as i32, target_x, target_y).await {
+        Ok(_) => println!("Sent view to workspace successfully."),
+        Err(e) => eprintln!("Failed to send view to workspace: {}", e),
     }
 
     match socket.set_view_minimized(view_id, true).await {

@@ -419,6 +419,19 @@ impl WayfireSocket {
         self.send_json(&message).await
     }
 
+    pub async fn send_view_to_workspace(&mut self, view_id: i32, x: i32, y: i32) -> io::Result<Value> {
+        let message = MsgTemplate {
+            method: "vswitch/send-view".to_string(),
+            data: Some(serde_json::json!({
+                "view-id": view_id,
+                "x": x,
+                "y": y,
+            })),
+        };
+
+        self.send_json(&message).await
+    }
+
     pub async fn send_view_to_back(&mut self, view_id: i64, state: bool) -> io::Result<Value> {
         let message = MsgTemplate {
             method: "wm-actions/send-to-back".to_string(),
