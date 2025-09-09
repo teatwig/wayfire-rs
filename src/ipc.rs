@@ -145,6 +145,16 @@ impl WayfireSocket {
         Ok(option_value_response)
     }
 
+    pub async fn list_config_options(&mut self) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
+        let message = MsgTemplate {
+            method: "wayfire/list-config-options".to_string(),
+            data: None,
+        };
+
+        let response = self.send_json(&message).await?;
+        Ok(response)
+    }
+
     pub async fn get_output(&mut self, output_id: i64) -> io::Result<Output> {
         let message = MsgTemplate {
             method: "window-rules/output-info".to_string(),

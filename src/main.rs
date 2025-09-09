@@ -50,6 +50,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
         Err(e) => eprintln!("Failed to get configuration: {}", e),
     }
 
+    match socket.list_config_options().await {
+        Ok(response) => print_json("list_config_options", response).await?,
+        Err(e) => eprintln!("Failed to list config options: {}", e),
+    }
+
     match socket.get_option_value("core/plugins").await {
         Ok(response) => print_json("get_option_value", response).await?,
         Err(e) => eprintln!("Failed to get option value: {}", e),
