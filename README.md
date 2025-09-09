@@ -73,6 +73,7 @@ Basic usage in wayfire-rs/examples folder and lots of examples in wayfire-rs/src
 ### Configuration
 - **`get_configuration`** - Retrieves Wayfire's full configuration
 - **`get_option_value`** - Gets value of a specific config option
+- **`list_config_options`** - Retrieves Wayfire's full configuration as a nested JSON object
 
 ### Contributing
 
